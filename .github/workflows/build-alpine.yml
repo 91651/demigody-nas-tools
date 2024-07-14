@@ -1,5 +1,5 @@
 
-name: NAStool Docker
+name: NAStool Docker (Alpine)
 on:
   workflow_dispatch:
     inputs:
