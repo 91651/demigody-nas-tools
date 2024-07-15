@@ -80,15 +80,14 @@ class MtUserInfo:
 
     def _get_user_torrent_list(self):
         page_no = 1
-        while True:
-            torrent_list_params = MtUserInfo.__init_torrent_list_params(self.user_info_data.get('id'), page_no)
-            user_torrent_list_data = self._get_data(MtUserInfo._user_torrent_list_url,
-                                                    json=torrent_list_params)
-            if user_torrent_list_data and len(user_torrent_list_data.get('data')) > 0:
-                page_no = page_no + 1
-                self.user_torrent_data_list += user_torrent_list_data.get('data')
-            else:
-                break
+        torrent_list_params = MtUserInfo.__init_torrent_list_params(self.user_info_data.get('id'), page_no)
+        user_torrent_list_data = self._get_data(MtUserInfo._user_torrent_list_url, json=torrent_list_params)
+        if user_torrent_list_data and len(user_torrent_list_data.get('data')) > 0:
+            self.user_torrent_data_list += user_torrent_list_data.get('data')
+        total = user_torrent_list_data.get('total')
+        if len(self.user_torrent_data_list) < int(total):
+            page_no = page_no + 1
+            self._get_user_torrent_list()
 
     def _get_peer_status(self):
         self.peer_status_data = self._get_data(MtUserInfo._peer_status_url)
